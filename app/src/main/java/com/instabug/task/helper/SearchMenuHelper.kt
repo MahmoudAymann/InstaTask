@@ -3,11 +3,8 @@ package com.instabug.task.helper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.forEach
 import com.instabug.task.R
-import com.instabug.task.base.InstaUtil
 
 class SearchMenuHelper(
     menu: Menu,

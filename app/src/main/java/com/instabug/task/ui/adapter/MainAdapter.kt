@@ -96,7 +96,7 @@ class MainAdapter(val mainAdapterCallBack: MainAdapterCallBack) :
                 submitList(mCurrentList)
             }
             SortState.DESC -> {
-                mCurrentList.sortBy { it.count }
+                mCurrentList.sortByDescending { it.count }
                 submitList(mCurrentList)
             }
         }

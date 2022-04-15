@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.instabug.task.ui.MainUiState
 
-class MainViewModel() : ViewModel(){
+class MainViewModel() : ViewModel() {
     //Handle UI states
     private val _uiState = MutableLiveData<MainUiState>(MainUiState.Init)
     val uiState: LiveData<MainUiState> = _uiState
@@ -13,7 +13,7 @@ class MainViewModel() : ViewModel(){
     /*
     * Request data from server
     * */
-    fun getData(){
+    fun getData() {
         _uiState.value = MainUiState.Loading(true)
     }
 
