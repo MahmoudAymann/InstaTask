@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">InstaTask</string>
+    <string name="sort">Sort</string>
+    <string name="search">Search</string>
+    <string name="ops_no_result_found_try_search_a_new_one">Ops!, no result found\nTry search a new one.</string>
 </resources>
