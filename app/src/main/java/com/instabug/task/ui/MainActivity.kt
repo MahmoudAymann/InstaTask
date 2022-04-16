@@ -12,13 +12,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.instabug.task.R
 import com.instabug.task.base.InstaUtil
 import com.instabug.task.base.show
+import com.instabug.task.base.showToast
 import com.instabug.task.databinding.ActivityMainBinding
+import com.instabug.task.di.MainModule
 import com.instabug.task.helper.SearchMenuHelper
-import com.instabug.task.ui.adapter.ItemMain
 import com.instabug.task.ui.adapter.MainAdapter
 import com.instabug.task.ui.adapter.MainAdapterCallBack
 import com.instabug.task.ui.adapter.SortState
 import com.instabug.task.ui.viewmodel.MainViewModel
+import com.instabug.task.ui.viewmodel.MainViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,19 +28,23 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
-    private val viewModel by lazy { ViewModelProvider(this)[MainViewModel::class.java] }
-    var searchListener: SearchView.OnQueryTextListener? = null
+    private val viewModel by lazy {
+        ViewModelProvider(
+            this, MainViewModelFactory.getInstance(this.application, MainModule())
+        )[MainViewModel::class.java]
+    }
+    private var searchListener: SearchView.OnQueryTextListener? = null
     val adapter by lazy {
-        MainAdapter(adapterCallBack).apply {
-            setList(ItemMain.dummy().toMutableList())
-        }
+        MainAdapter(adapterCallBack)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        initRecyclerView()
         handleViewModelState()
         initSearchListener()
+        viewModel.getData()
     }
 
     private fun initSearchListener() {
@@ -59,11 +65,10 @@ class MainActivity : AppCompatActivity() {
     private fun handleViewModelState() {
         viewModel.uiState.observe(this) {
             when (it) {
-                MainUiState.Init -> {
-                    initRecyclerView()
-                }
+                MainUiState.Init -> {}
                 is MainUiState.Loading -> binding.progressBar.show(it.isLoading)
-
+                is MainUiState.Failure -> showToast(it.message)
+                is MainUiState.Success -> adapter.setList(it.data)
             }
         }
     }

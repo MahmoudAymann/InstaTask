@@ -15,9 +15,9 @@ interface MainAdapterCallBack {
 }
 
 class MainAdapter(val mainAdapterCallBack: MainAdapterCallBack) :
-    ListAdapter<ItemMain, MainAdapter.MainViewHolder>(MainDiffUtil()),
+    ListAdapter<ItemWord, MainAdapter.MainViewHolder>(MainDiffUtil()),
     Filterable {
-    private var mCurrentList = mutableListOf<ItemMain>()
+    private var mCurrentList = mutableListOf<ItemWord>()
     var sortState = SortState.UNSORTED
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         return MainViewHolder.create(parent)
@@ -27,8 +27,9 @@ class MainAdapter(val mainAdapterCallBack: MainAdapterCallBack) :
         holder.bind(getItem(position))
     }
 
-    fun setList(listOfItems: MutableList<ItemMain>) {
-        mCurrentList = listOfItems
+    fun setList(listOfItems: List<ItemWord>) {
+        mCurrentList.clear()
+        mCurrentList.addAll(listOfItems)
         submitList(mCurrentList)
     }
 
@@ -43,7 +44,7 @@ class MainAdapter(val mainAdapterCallBack: MainAdapterCallBack) :
             }
         }
 
-        fun bind(item: ItemMain) {
+        fun bind(item: ItemWord) {
             binding.tvWord.text = item.word
             binding.tvCount.text = item.count.toString()
         }
@@ -52,7 +53,7 @@ class MainAdapter(val mainAdapterCallBack: MainAdapterCallBack) :
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(text: CharSequence?): FilterResults {
-                val filteredList = mutableListOf<ItemMain>()
+                val filteredList = mutableListOf<ItemWord>()
                 if (text.isNullOrEmpty()) {
                     filteredList.addAll(mCurrentList)
                 } else {
@@ -69,7 +70,7 @@ class MainAdapter(val mainAdapterCallBack: MainAdapterCallBack) :
 
             override fun publishResults(text: CharSequence?, filterResults: FilterResults?) {
                 try {
-                    val listOfItems = filterResults?.values as MutableList<ItemMain>
+                    val listOfItems = filterResults?.values as MutableList<ItemWord>
                     mainAdapterCallBack.isEmpty(listOfItems.isNullOrEmpty())
                     submitList(listOfItems)
                 } catch (e: Exception) {
@@ -80,7 +81,7 @@ class MainAdapter(val mainAdapterCallBack: MainAdapterCallBack) :
         }
     }
 
-    override fun submitList(list: MutableList<ItemMain>?) {
+    override fun submitList(list: MutableList<ItemWord>?) {
         super.submitList(list?.let { ArrayList(it) })
     }
 
@@ -103,12 +104,12 @@ class MainAdapter(val mainAdapterCallBack: MainAdapterCallBack) :
     }
 }
 
-class MainDiffUtil : DiffUtil.ItemCallback<ItemMain>() {
-    override fun areItemsTheSame(oldItem: ItemMain, newItem: ItemMain): Boolean {
+class MainDiffUtil : DiffUtil.ItemCallback<ItemWord>() {
+    override fun areItemsTheSame(oldItem: ItemWord, newItem: ItemWord): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: ItemMain, newItem: ItemMain): Boolean {
+    override fun areContentsTheSame(oldItem: ItemWord, newItem: ItemWord): Boolean {
         return oldItem == newItem
     }
 }
