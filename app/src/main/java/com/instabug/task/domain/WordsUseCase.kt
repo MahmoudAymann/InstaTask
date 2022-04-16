@@ -7,7 +7,7 @@ import com.instabug.task.base.ResourceWrap
 import com.instabug.task.ui.adapter.ItemWord
 import java.util.concurrent.Executors
 
-class WordsUseCase(private val repository: MainRepository) {
+class WordsUseCase(private val repository: WordsRepository) {
     companion object {
         const val TAG = "WordsUseCase"
     }
@@ -24,16 +24,18 @@ class WordsUseCase(private val repository: MainRepository) {
                             result.invoke(ResourceWrap.loading(false))
                         }
                         is NetworkResult.Success -> {
-                            //todo save to Local db
                             val list = WordsMapper().mapToListOfWords(res.data)
-                            result.invoke(ResourceWrap.success(list))
+                            if (repository.saveWordsLocal(list)) {
+                                val local = repository.getWordsLocal()
+                                result.invoke(ResourceWrap.success(local))
+                            } else
+                                result.invoke(ResourceWrap.success(emptyList()))
                             result.invoke(ResourceWrap.loading(false))
                             it.shutdown()
                         }
                     }
                 } else { //Offline
-                    //todo get from Local
-                    result.invoke(ResourceWrap.success(emptyList()))
+                    result.invoke(ResourceWrap.success(repository.getWordsLocal()))
                     result.invoke(ResourceWrap.loading(false))
                 }
 

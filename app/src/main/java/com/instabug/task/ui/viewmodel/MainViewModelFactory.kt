@@ -3,15 +3,20 @@ package com.instabug.task.ui.viewmodel
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.instabug.task.di.MainModule
+import com.instabug.task.di.AppModule
 import com.instabug.task.domain.WordsUseCase
 
 class MainViewModelFactory private constructor(
     private val application: Application,
-    mainModule: MainModule
+    appModule: AppModule
 ) : ViewModelProvider.NewInstanceFactory() {
     private val getUseCase: WordsUseCase =
-        mainModule.provideInstaBugUseCase(mainModule.provideRepo(mainModule.provideApiService()))
+        appModule.provideInstaBugUseCase(
+            appModule.provideRepo(
+                appModule.provideApiService(),
+                appModule.provideDBHandler(application)
+            )
+        )
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return if (MainViewModel::class.java.isAssignableFrom(modelClass)) {
@@ -29,7 +34,7 @@ class MainViewModelFactory private constructor(
         private var sInstance: MainViewModelFactory? = null
         fun getInstance(
             application: Application,
-            module: MainModule
+            module: AppModule
         ): MainViewModelFactory {
             if (sInstance == null) {
                 sInstance = MainViewModelFactory(application, module)

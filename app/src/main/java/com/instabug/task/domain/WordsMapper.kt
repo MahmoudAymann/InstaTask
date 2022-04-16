@@ -11,16 +11,22 @@ class WordsMapper {
         val text = Jsoup.parse(body).body().text()
         val listOfWords = arrayListOf<ItemWord>()
         val resMap = mutableMapOf<String, Int>()
-        text.trim().split(" ").forEach {
-            if (it.isNotEmpty()) {
-                val value = regex.replace(it, "")
-                resMap[value] = resMap[it]?.plus(1) ?: 1
+        text.trim().split(" ").forEach { word ->
+            if (word.isNotEmpty()) {
+                val key = regex.replace(word, "")
+                resMap[key] = resMap[word]?.plus(1) ?: 1
             }
         }
-        resMap.forEach {
-            listOfWords.add(ItemWord(id = it.key.indexOf(it.key), word = it.key, count = it.value))
+        //setup words list
+        resMap.onEachIndexed { index, entry ->
+            listOfWords.add(
+                ItemWord(
+                    id = index, word = entry.key,
+                    count = entry.value
+                )
+            )
         }
-        Log.e("list", listOfWords.toString())
+        Log.d("list", listOfWords.toString())
         return listOfWords
     }
 }

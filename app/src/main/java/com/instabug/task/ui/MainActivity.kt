@@ -14,7 +14,7 @@ import com.instabug.task.base.InstaUtil
 import com.instabug.task.base.show
 import com.instabug.task.base.showToast
 import com.instabug.task.databinding.ActivityMainBinding
-import com.instabug.task.di.MainModule
+import com.instabug.task.di.AppModule
 import com.instabug.task.helper.SearchMenuHelper
 import com.instabug.task.ui.adapter.MainAdapter
 import com.instabug.task.ui.adapter.MainAdapterCallBack
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel by lazy {
         ViewModelProvider(
-            this, MainViewModelFactory.getInstance(this.application, MainModule())
+            this, MainViewModelFactory.getInstance(this.application, AppModule)
         )[MainViewModel::class.java]
     }
     private var searchListener: SearchView.OnQueryTextListener? = null
