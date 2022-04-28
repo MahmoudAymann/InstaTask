@@ -7,7 +7,7 @@ import com.instabug.task.base.ResourceWrap
 import com.instabug.task.ui.adapter.ItemWord
 import java.util.concurrent.Executors
 
-class WordsUseCase(private val repository: WordsRepository) {
+open class WordsUseCase(private val repository: WordsRepository) {
     companion object {
         const val TAG = "WordsUseCase"
     }

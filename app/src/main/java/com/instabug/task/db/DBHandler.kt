@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.instabug.task.ui.adapter.ItemWord
 
-class DBHandler private constructor(context: Context?) :
+open class DBHandler private constructor(context: Context?) :
     SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase) {

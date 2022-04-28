@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         handleViewModelState()
         initSearchListener()
         viewModel.getData()
+
     }
 
     private fun initSearchListener() {
